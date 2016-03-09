@@ -37,3 +37,23 @@ require("!style!css!less!bootstrap/less/bootstrap.less");
 表示需要传入loader的参数(多半表示限制条件)，例如：
 
 `{test : /\.png$/, loader : 'url-loader?mimetype=image/png'}`
+
+## 3. 关于code-splitting
+*采用`require.ensure`方式划分文件块
+>`require.ensure(dependencies, callback)`
+>The require.ensure method ensures that every dependency in dependencies can be synchronously required when calling the callback. callback is called with the require function as parameter.
+>`require.ensure` only loads the modules, it doesn’t evaluate them.
+
+ensure 使得我们可在所有的dependencies项加载完毕后，再执行回调 。ensure仅仅是加载组件，并不会执行，若要执行，需要借助传进去的require参数。
+
+本地三个模块a,b,c，各在模块中暴露一个全局变量
+```javascript
+var a = require("./a");
+require.ensure(["./b"], function(require) {
+    var c = require("./c");
+});
+```
+编译之后发现：生成了两个块文件，ensure方式加载的文件模块被单独划分为一个块
+![ensure](./code-splitting/ensure.png)
+
+*采用CommonsChunkPlugin插件进行按需划分
