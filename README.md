@@ -1,6 +1,8 @@
 # 一些关于webpack用法的笔记
 
-## 基本用法<https://github.com/petehunt/webpack-howto>
+## 基本用法
+<https://github.com/petehunt/webpack-howto>
+
 ## 基本的配置文件
 
 ```javascript
@@ -65,4 +67,4 @@ require.ensure(["./b"], function(require) {
 ## 4. Shim
 如果某个需要全局依赖另一个模块，这时就需要将另一个模块挂载在全局
 
-参考文档<https://github.com/webpack/docs/wiki/shimming-modules>
+参考文档：<https://github.com/webpack/docs/wiki/shimming-modules>
