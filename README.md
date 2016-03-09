@@ -57,10 +57,12 @@ require.ensure(["./b"], function(require) {
 ```
 编译之后发现：生成了两个块文件，ensure方式加载的文件模块被单独划分为一个块
 ![ensure](./code-spliting/ensure.png)
+
 打开chrome控制台,输入window.a,以及window.c会得到值,而window.b会显示undefine
 
 * 采用CommonsChunkPlugin插件进行按需划分
 
 ## 4. Shim
 如果某个需要全局依赖另一个模块，这时就需要将另一个模块挂载在全局
+
 参考文档<https://github.com/webpack/docs/wiki/shimming-modules>
