@@ -68,3 +68,39 @@ require.ensure(["./b"], function(require) {
 如果某个需要全局依赖另一个模块，这时就需要将另一个模块挂载在全局
 
 参考文档：<https://github.com/webpack/docs/wiki/shimming-modules>
+
+## 5. 关于output中的publicPath
+代表了线上发布的目录，通常是CDN替换
+```javascript
+output: {
+    path: "/home/proj/public/assets",
+    publicPath: "/assets/"
+}
+```
+
+## 6. long-term-caching
+参照[官网](http://webpack.github.io/docs/long-term-caching.html),为编译文件生成hash值,然后在自定义插件中动态替换脚本引用
+```javascript
+// config
+{
+    output: {
+        path: path.join(__dirname, "assets", "[hash]"),
+        publicPath: "assets/[hash]/",                       // 线上发布目录
+        filename: "output.[hash].bundle.js",                // 编译生成hash文件名
+        chunkFilename: "[id].[hash].bundle.js"              // 块文件hash
+    }
+}
+
+// generate json File && replace html reference
+fs.writeFileSync(
+    path.join(__dirname, "stats.json"),
+    JSON.stringify(stats.toJson())
+);
+fs.readFile('./index.html', function(err, data) {
+   var $ = cheerio.load(data.toString());
+   $('script[src*=assert]').attr('src', './assert/'+ stats.hash +'/output.'+ stats.hash +'.bundle.js');
+   fs.writeFile('./index.html', $.html(), function(err) {
+       !err && console.log('Set has success: '+ stats.hash)
+   })
+})
+```
