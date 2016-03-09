@@ -40,10 +40,9 @@ require("!style!css!less!bootstrap/less/bootstrap.less");
 
 ## 3. 关于code-splitting
 * 采用`require.ensure`方式划分文件块
+
 >`require.ensure(dependencies, callback)`
-
 >The require.ensure method ensures that every dependency in dependencies can be synchronously required when calling the callback. callback is called with the require function as parameter.
-
 >`require.ensure` only loads the modules, it doesn’t evaluate them.
 
 ensure 使得我们可在所有的dependencies项加载完毕后，再执行回调 。ensure仅仅是加载组件，并不会执行，若要执行，需要借助传进去的require参数。
@@ -56,6 +55,6 @@ require.ensure(["./b"], function(require) {
 });
 ```
 编译之后发现：生成了两个块文件，ensure方式加载的文件模块被单独划分为一个块
-![ensure](./code-splitting/ensure.png)
+![ensure](./code-spliting/ensure.png)
 
 * 采用CommonsChunkPlugin插件进行按需划分
