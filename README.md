@@ -1,5 +1,6 @@
 # 一些关于webpack用法的笔记
 
+## 基本用法<https://github.com/petehunt/webpack-howto>
 ## 基本的配置文件
 
 ```javascript
@@ -17,7 +18,7 @@ module.exports = {
 };
 ```
 
-## 1."!"代表的意义
+## 1. "!"代表的意义
 代表了加载器的流式调用,例如：
 
 `{test : /\.css|less$/, loader : "!style!css!less"}`
@@ -33,7 +34,7 @@ require("!style!css!less!bootstrap/less/bootstrap.less");
 //    If configuration has some transforms bound to the file, they will not be applied.
 ```
 
-## 2.请求参数
+## 2. 请求参数
 表示需要传入loader的参数(多半表示限制条件)，例如：
 
 `{test : /\.png$/, loader : 'url-loader?mimetype=image/png'}`
@@ -56,5 +57,10 @@ require.ensure(["./b"], function(require) {
 ```
 编译之后发现：生成了两个块文件，ensure方式加载的文件模块被单独划分为一个块
 ![ensure](./code-spliting/ensure.png)
+打开chrome控制台,输入window.a,以及window.c会得到值,而window.b会显示undefine
 
 * 采用CommonsChunkPlugin插件进行按需划分
+
+## 4. Shim
+如果某个需要全局依赖另一个模块，这时就需要将另一个模块挂载在全局
+参考文档<https://github.com/webpack/docs/wiki/shimming-modules>
