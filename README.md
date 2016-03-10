@@ -147,20 +147,28 @@ plugins: [
 * 配合CommonsChunkPlugin插件使用,会提出公共的js文件以及公共的css文件
 * 如果编译出错,不妨升级一下全局webpack试试,我当时的1.12.2的版本一直报错，升级之后就可以了
 
-## 8. resolve(可以在文件中直接引用需要加载的文件 without suffix)
+## 8. resolve
+* extensions(可以在文件中直接引用需要加载的文件 without suffix)
+
 ```javascript
 resolve: {
     extensions: ['', '.js', '.es6']
 },
 ```
+* alias
+
+resolve里面有一个alias的配置项目，能够让开发者指定一些模块的引用路径。对一些经常要被import或者require的库，如react,我们最好可以直接指定它们的位置，这样webpack可以省下不少搜索硬盘的时间。
+
+![alias](./library&&externals/alias.png)
+
 ## 9. 一些插件
-1. 压缩
+- 压缩
 
 >To minimize your scripts (and your css, if you use the css-loader) webpack supports a simple option:
 
 >`new webpack.optimize.UglifyJsPlugin()`
 
-2. 合并比较小的块文件，减少request请求
+- 合并比较小的块文件，减少request请求
 
 >While writing your code, you may have already added many code split points to load stuff on demand. After compiling you might notice that there are too many chunks that are too small - creating larger HTTP overhead. Luckily, Webpack can post-process your chunks by merging them. You can provide two options:
 
@@ -171,3 +179,20 @@ resolve: {
 >Limit the minimum chunk size with `new webpack.optimize.MinChunkSizePlugin({minChunkSize: 10000})`
 
 > //限制每一个文件块的最小占用空间
+
+## 10. library && externals
+
+`output.libraryTarget` 指定输出的类型,指定可以在文件中以何种方式使用(CommonJs, AMD, var Or UMD)
+
+`output.library` 指定输出库的名字
+
+`externals` 如果一些库不想被打包到bundle中，而又必须被依赖，那么就可以使用这个参数，同时在页面中使用<script>标签
+
+>externals对象的key是给require时用的，比如require('react')，对象的value表示的是如何在global（即window）中访问到该对象，这里是window.React。
+
+>同理jquery的话就可以这样写：'jquery': 'jQuery'，那么require('jquery')即可。
+
+## 贴几篇文章
+[关于externals解释](https://segmentfault.com/q/1010000002720840)
+
+[webpack使用优化](http://www.open-open.com/lib/view/open1452487103323.html)
