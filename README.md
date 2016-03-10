@@ -164,6 +164,10 @@ resolve: {
 
 >While writing your code, you may have already added many code split points to load stuff on demand. After compiling you might notice that there are too many chunks that are too small - creating larger HTTP overhead. Luckily, Webpack can post-process your chunks by merging them. You can provide two options:
 
->Limit the maximum chunk count with `new webpack.optimize.LimitChunkCountPlugin({maxChunks: 15})` 限制最大的文件块数量
+>Limit the maximum chunk count with `new webpack.optimize.LimitChunkCountPlugin({maxChunks: 15})`
 
->Limit the minimum chunk size with `new webpack.optimize.MinChunkSizePlugin({minChunkSize: 10000})` 限制每一个文件块的最小占用空间
+>//限制最大的文件块数量
+
+>Limit the minimum chunk size with `new webpack.optimize.MinChunkSizePlugin({minChunkSize: 10000})`
+
+> //限制每一个文件块的最小占用空间
