@@ -1,5 +1,6 @@
 var path = require("path");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var webpack = require('webpack');
 
 module.exports = {
     entry : {
@@ -7,7 +8,7 @@ module.exports = {
         app : './src/js/app.js'
     },
     output : {
-        path : path.join(__dirname, 'dist'),
+        path : path.join(__dirname, 'common'),
         filename : 'js/[name].js',
         chunkFilename: "js/[id].chunk.js"
     },
@@ -20,6 +21,7 @@ module.exports = {
         extensions: ['', '.js', '.es6']
     },
     plugins: [
+        new webpack.optimize.CommonsChunkPlugin("commons", "commons.js"),
         new ExtractTextPlugin("[name].css")
     ]
 };

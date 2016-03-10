@@ -104,3 +104,43 @@ fs.readFile('./index.html', function(err, data) {
    })
 })
 ```
+
+## 7. stylesheets(关于独立出css文件的用法)
+官网已经讲解得很清楚<http://webpack.github.io/docs/stylesheets.html>
+
+* with plugin 'extract-text-webpack-plugin'
+`npm install extract-text-webpack-plugin --save-dev`
+
+```javascript
+// loaders
+module: {
+    loaders: [
+        {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}
+    ]
+},
+
+// plugins
+plugins: [
+    new ExtractTextPlugin("[name].css")
+]
+
+// all style will be commited to the [name].css (the name is what your entry has been setted)
+// all styles in separate css output file with the config
+//
+// `new ExtractTextPlugin("style.css", {allChunks: true})`
+// so the chunk files don't contain the embedded styles
+```
+
+* styles in commons chunk
+>You can use a separate css file in combination with the CommonsChunkPlugin. In this case a css file for the commons chunk is emitted too.
+
+```javascript
+plugins: [
+    new webpack.optimize.CommonsChunkPlugin("commons", "commons.js"),
+    new ExtractTextPlugin("[name].css")
+]
+```
+
+### Tips
+* 配合CommonsChunkPlugin插件使用,会提出公共的js文件以及公共的css文件
+* 如果编译出错,不妨升级一下全局webpack试试,我当时的1.12.2的版本一直报错，升级之后就可以了
