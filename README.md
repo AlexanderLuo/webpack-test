@@ -68,13 +68,13 @@ require.ensure(["./b"], function(require) {
 在某些情况下，如果一个文件中存在一些不被支持的模块格式或者根本就不能称作为模块的格式，那么webpack并不能完好的解析它。这时就要借助一些方法
 使得这样的文件成为一个能够被webpack解析的模块
 
-*import-loader*
+**import-loader**
 
 >This loader allows you to put some modules or arbitrary JavaScript onto a local variable of the file.
 
 >这个加载器允许你将一些模块或者任意的javascript代码赋值到一个本地变量上
 
-*plugin `ProvidePlugin`*
+**plugin `ProvidePlugin`**
 
 >This plugin makes a module available as variable in every module. The module is required only if you use the variable.
 
@@ -88,9 +88,9 @@ new webpack.ProvidePlugin({
 })
 ```
 
-[官网中关于webpack shim的讲解](http://webpack.github.io/docs/shimming-modules.html)
+参考文档：[官网中关于webpack shim的讲解](http://webpack.github.io/docs/shimming-modules.html)
 
-参考文档：<https://github.com/webpack/docs/wiki/shimming-modules>
+<https://github.com/webpack/docs/wiki/shimming-modules>
 
 ## 5. 关于output中的publicPath
 代表了线上发布的目录，通常是CDN替换
