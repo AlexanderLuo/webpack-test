@@ -65,7 +65,30 @@ require.ensure(["./b"], function(require) {
 * 采用CommonsChunkPlugin插件进行按需划分
 
 ## 4. Shim
-如果某个需要全局依赖另一个模块，这时就需要将另一个模块挂载在全局
+在某些情况下，如果一个文件中存在一些不被支持的模块格式或者根本就不能称作为模块的格式，那么webpack并不能完好的解析它。这时就要借助一些方法
+使得这样的文件成为一个能够被webpack解析的模块
+
+*import-loader*
+
+>This loader allows you to put some modules or arbitrary JavaScript onto a local variable of the file.
+
+>这个加载器允许你将一些模块或者任意的javascript代码赋值到一个本地变量上
+
+*plugin `ProvidePlugin`*
+
+>This plugin makes a module available as variable in every module. The module is required only if you use the variable.
+
+>Example: Make $ and jQuery available in every module without writing require("jquery").
+
+>```javascript
+new webpack.ProvidePlugin({
+    $: "jquery",
+    jQuery: "jquery",
+    "window.jQuery": "jquery"
+})
+```
+
+[官网中关于webpack shim的讲解](http://webpack.github.io/docs/shimming-modules.html)
 
 参考文档：<https://github.com/webpack/docs/wiki/shimming-modules>
 
@@ -188,7 +211,7 @@ resolve里面有一个alias的配置项目，能够让开发者指定一些模�
 
 `externals` 如果一些库不想被打包到bundle中，而又必须被依赖，那么就可以使用这个参数，同时在页面中使用<script>标签
 
->externals对象的key是给require时用的，比如require('react')，对象的value表示的是如何在global（即window）中访问到该对象，这里是window.React。
+>externals对象的key是给require时用的，比如require('react')，对象的value表示的是如何在global（即window）中访问到该对象。
 
 >同理jquery的话就可以这样写：'jquery': 'jQuery'，那么require('jquery')即可。
 
