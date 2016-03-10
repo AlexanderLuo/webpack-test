@@ -1,7 +1,14 @@
 # 一些关于webpack用法的笔记
 
 ## 基本用法
+<http://webpack.github.io/docs/installation.html>
+
 <https://github.com/petehunt/webpack-howto>
+
+## 贴几篇文章
+[关于externals解释](https://segmentfault.com/q/1010000002720840)
+
+[webpack使用优化](http://www.open-open.com/lib/view/open1452487103323.html)
 
 ## 基本的配置文件
 
@@ -213,8 +220,3 @@ resolve里面有一个alias的配置项目，能够让开发者指定一些模�
 >externals对象的key是给require时用的，比如require('react')，对象的value表示的是如何在global（即window）中访问到该对象。
 
 >同理jquery的话就可以这样写：'jquery': 'jQuery'，那么require('jquery')即可。
-
-## 11. 贴几篇文章
-[关于externals解释](https://segmentfault.com/q/1010000002720840)
-
-[webpack使用优化](http://www.open-open.com/lib/view/open1452487103323.html)
