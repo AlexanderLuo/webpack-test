@@ -106,9 +106,10 @@ fs.readFile('./index.html', function(err, data) {
 ```
 
 ## 7. stylesheets(关于独立出css文件的用法)
-官网已经讲解得很清楚<http://webpack.github.io/docs/stylesheets.html>
+官网已经讲解得很清楚 <http://webpack.github.io/docs/stylesheets.html>
 
 * with plugin 'extract-text-webpack-plugin'
+
 `npm install extract-text-webpack-plugin --save-dev`
 
 ```javascript
@@ -125,18 +126,19 @@ plugins: [
 ]
 
 // all style will be commited to the [name].css (the name is what your entry has been setted)
+
 // all styles in separate css output file with the config
-//
-// `new ExtractTextPlugin("style.css", {allChunks: true})`
+// new ExtractTextPlugin("style.css", {allChunks: true})
 // so the chunk files don't contain the embedded styles
 ```
 
 * styles in commons chunk
+
 >You can use a separate css file in combination with the CommonsChunkPlugin. In this case a css file for the commons chunk is emitted too.
 
 ```javascript
 plugins: [
-    new webpack.optimize.CommonsChunkPlugin("commons", "commons.js"),
+    new webpack.optimize.CommonsChunkPlugin(/*name:*/"commons", /*chunks:*/"commons.js"),
     new ExtractTextPlugin("[name].css")
 ]
 ```
@@ -144,3 +146,24 @@ plugins: [
 ### Tips
 * 配合CommonsChunkPlugin插件使用,会提出公共的js文件以及公共的css文件
 * 如果编译出错,不妨升级一下全局webpack试试,我当时的1.12.2的版本一直报错，升级之后就可以了
+
+## 8. resolve(可以在文件中直接引用需要加载的文件 without suffix)
+```javascript
+resolve: {
+    extensions: ['', '.js', '.es6']
+},
+```
+## 9. 一些插件
+1. 压缩
+
+>To minimize your scripts (and your css, if you use the css-loader) webpack supports a simple option:
+
+>`new webpack.optimize.UglifyJsPlugin()`
+
+2. 合并比较小的块文件，减少request请求
+
+>While writing your code, you may have already added many code split points to load stuff on demand. After compiling you might notice that there are too many chunks that are too small - creating larger HTTP overhead. Luckily, Webpack can post-process your chunks by merging them. You can provide two options:
+
+>Limit the maximum chunk count with `new webpack.optimize.LimitChunkCountPlugin({maxChunks: 15})` 限制最大的文件块数量
+
+>Limit the minimum chunk size with `new webpack.optimize.MinChunkSizePlugin({minChunkSize: 10000})` 限制每一个文件块的最小占用空间
