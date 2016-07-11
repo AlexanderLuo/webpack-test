@@ -231,9 +231,9 @@ resolve里面有一个alias的配置项目，能够让开发者指定一些模�
 
 `externals` 如果一些库不想被打包到bundle中，而又必须被依赖，那么就可以使用这个参数，同时在页面中使用<script>标签
 
->externals对象的key是给require时用的，比如require('react')，对象的value表示的是如何在global（即window）中访问到该对象。
+`externals`对象的`key`是给`require`时用的，比如`require('react')`，对象的value表示的是如何在`global`（即`window`）中访问到该对象。
 
->同理jquery的话就可以这样写：'jquery': 'jQuery'，那么require('jquery')即可。
+同理`jquery`的话就可以这样写：`'jquery': 'jQuery'`，那么`require('jquery')`即可。
 
 ## 11.上线的一些配置文件(可另外写一个配置文件，例如:webpack.pro.config.js 调用：webpack --config webpack.pro.config.js)
 - 压缩Javascript
