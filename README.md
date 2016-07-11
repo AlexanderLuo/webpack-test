@@ -81,6 +81,13 @@ require.ensure(["./b"], function(require) {
 
 >这个加载器允许你将一些模块或者任意的javascript代码赋值到一个本地变量上
 
+比如有如下场景：我们用到 Pen 这个模块, 这个模块对依赖一个 window.jQuery, 可我手头的 jQuery 是 CommonJS 语法的，而 Pen 对象又是生成好了绑在全局的, 可是我又需要通过 require('pen') 获取变量。 最终的写法就是做 Shim 处理直接提供支持:
+
+```javascript
+{test: require.resolve('jquery'), loader: 'expose?jQuery'}, // 输出jQuery到全局
+{test: require.resolve('pen'), loader: 'exports?window.Pen'}    // 将Pen作为一个模块引入
+```
+
 **plugin `ProvidePlugin`**
 
 >This plugin makes a module available as variable in every module. The module is required only if you use the variable.
