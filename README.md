@@ -229,7 +229,7 @@ resolve里面有一个alias的配置项目，能够让开发者指定一些模�
 
 `output.library` 指定输出库的名字
 
-`externals` 如果一些库不想被打包到bundle中，而又必须被依赖，那么就可以使用这个参数，同时在页面中使用<script>标签
+`externals` 如果一些库不想被打包到bundle中，而又必须被依赖，那么就可以使用这个参数，同时在页面中使用`<script>`标签
 
 externals对象的key是给require时用的，比如require('react')，对象的value表示的是如何在global（即window）中访问到该对象。
 
