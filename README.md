@@ -132,23 +132,21 @@ output: {
 plugins: [
   function() {
     this.plugin("done", function(stats) {
-      require("fs").writeFileSync(
-        path.join(__dirname, "...", "stats.json"),
-        JSON.stringify(stats.toJson()));
+        fs.writeFileSync(
+            path.join(__dirname, "stats.json"),
+            JSON.stringify(stats.toJson())
+        );
+        fs.readFile('./index.html', function(err, data) {
+            var $ = cheerio.load(data.toString());
+            $('script[src*=assert]').attr('src', './assert/'+ stats.hash +'/output.'+ stats.hash +'.bundle.js');
+            fs.writeFile('./index.html', $.html(), function(err) {
+                !err && console.log('Set has success: '+ stats.hash)
+            })
+        })
     });
   }
 ]
-fs.writeFileSync(
-    path.join(__dirname, "stats.json"),
-    JSON.stringify(stats.toJson())
-);
-fs.readFile('./index.html', function(err, data) {
-   var $ = cheerio.load(data.toString());
-   $('script[src*=assert]').attr('src', './assert/'+ stats.hash +'/output.'+ stats.hash +'.bundle.js');
-   fs.writeFile('./index.html', $.html(), function(err) {
-       !err && console.log('Set has success: '+ stats.hash)
-   })
-})
+
 ```
 
 ## 7. stylesheets(关于独立出css文件的用法)
