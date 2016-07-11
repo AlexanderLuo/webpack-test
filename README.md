@@ -129,6 +129,15 @@ output: {
 }
 
 // generate json File && replace html reference
+plugins: [
+  function() {
+    this.plugin("done", function(stats) {
+      require("fs").writeFileSync(
+        path.join(__dirname, "...", "stats.json"),
+        JSON.stringify(stats.toJson()));
+    });
+  }
+]
 fs.writeFileSync(
     path.join(__dirname, "stats.json"),
     JSON.stringify(stats.toJson())
