@@ -1,260 +1,1080 @@
-# ä¸€äº›å…³äºwebpackç”¨æ³•çš„ç¬”è®°
+## 1. µ¼Óï
 
-## åŸºæœ¬ç”¨æ³•
-<http://webpack.github.io/docs/installation.html>
+###  1.1 Ê²Ã´½Ğ×öwebpack
+> webpack is a module bundler. 
+> webpack takes modules with dependencies and generates static assets representing those modules.
 
-<https://github.com/petehunt/webpack-howto>
+¼òµ¥µÄ¸ÅÀ¨¾ÍÊÇ£ºwebpackÊÇÒ»¸öÄ£¿é´ò°ü¹¤¾ß£¬´¦ÀíÄ£¿éÖ®¼äµÄÒÀÀµÍ¬Ê±Éú³É¶ÔÓ¦Ä£¿éµÄ¾²Ì¬×ÊÔ´¡£
 
-## è´´å‡ ç¯‡æ–‡ç« 
-[å…³äºexternalsè§£é‡Š](https://segmentfault.com/q/1010000002720840)
+### 1.2 webpack¿ÉÒÔ×öÒ»Ğ©Ê²Ã´ÊÂÇé
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723105504240)
 
-[webpackä½¿ç”¨ä¼˜åŒ–](http://www.open-open.com/lib/view/open1452487103323.html)
+Í¼ÖĞÒÑ¾­ºÜÇå³şµÄ·´Ó¦ÁË¼¸¸öĞÅÏ¢£º
 
-## åŸºæœ¬çš„é…ç½®æ–‡ä»¶
+ - webpack°ÑÏîÄ¿ÖĞËùÓĞµÄ¾²Ì¬ÎÄ¼ş¶¼¿´×÷Ò»¸öÄ£¿é
+ - Ä£¿ìÖ®¼ä´æÔÚ×ÅÒ»Ğ©ÁĞµÄÒÀÀµ
+ - ¶àÒ³ÃæµÄ¾²Ì¬×ÊÔ´Éú³É(´ò°üÖ®ºóÉú³É¶à¸ö¾²Ì¬ÎÄ¼ş£¬Éæ¼°µ½´úÂë²ğ·Ö)
+
+## 2. webpack°²×°
+
+- È«¾Ö°²×°(¹©È«¾Öµ÷ÓÃ£ºÈç`webpack --config webpack.config.js`)
 
 ```javascript
+npm install -g webpack
+```
+- ÏîÄ¿°²×°
+
+```javascript
+npm install webpack
+
+// ´¦ÀíÀàËÆÈçÏÂµ÷ÓÃ
+import webpack from "webpack";
+var webpack = require("webpack");
+```
+
+½¨Òé°²×°ÌÔ±¦µÄnpm¾µÏñ£¬ÕâÑùÏÂÔØnpm°ü»á¿ìÉÏºÜ¶à£¬¾ßÌå×ö·¨£º
+
+```javascript
+// ·½Ê½Ò»
+npm install xx --registry=https://registry.npm.taobao.org/
+
+// ·½Ê½¶ş:°²×°ÌÔ±¦Ìá¹©µÄnpm¹¤¾ß
+npm install -g cnpm
+cnpm install xx
+
+// ·½Ê½Èı
+// ÔÚÓÃ»§Ö÷Ä¿Â¼ÏÂ£¬ÕÒµ½.npmrcÎÄ¼ş£¬¼ÓÉÏÏÂÃæÕâ¶ÎÅäÖÃ
+registry=https://registry.npm.taobao.org/
+```
+
+## 3. webpackµÄ»ù±¾ÅäÖÃ
+´´½¨ÅäÖÃÎÄ¼ş(`webpack.config.js`£¬Ö´ĞĞwebpackÃüÁîµÄÊ±ºò£¬Ä¬ÈÏ»áÖ´ĞĞÕâ¸öÎÄ¼ş)
+```javascript
+module.export = {
+	entry : 'app.js',
+	output : {
+		path : 'assets/',
+		filename : '[name].bundle.js'
+	},
+	module : {
+		loaders : [
+			// Ê¹ÓÃbabel-loader½âÎöjs»òÕßjsxÄ£¿é
+			{ test : /\.js|\.jsx$/, loader : 'babel' },
+			// Ê¹ÓÃcss-loader½âÎöcssÄ£¿é
+			{ test : /\.css$/, loader : 'style!css' },
+			// or another way
+			{ test : /\.css$/, loader : ['style', 'css'] }
+		]
+	}
+};
+```
+ËµÃ÷Ò»£º `webpack.config.js`Ä¬ÈÏÊä³öÒ»¸ö`webpack`µÄÅäÖÃÎÄ¼ş£¬Óë`CLI`·½Ê½µ÷ÓÃÏàÍ¬£¬Ö»ÊÇ¸ü¼Ó¼ò±ã
+
+ËµÃ÷¶ş£º Ö´ĞĞ`webpack`ÃüÁî¼´¿ÉÒÔÔËĞĞÅäÖÃ£¬ÏÈ¾öÌõ¼ş£¬È«¾Ö°²×°`webpack`£¬ÏîÄ¿°²×°¸÷Ä£¿é`loader`
+
+ËµÃ÷Èı£º `entry`¶ÔÓ¦ĞèÒª´ò°üµÄÈë¿Ú`js`ÎÄ¼ş£¬`output`¶ÔÓ¦Êä³öµÄÄ¿Â¼ÒÔ¼°ÎÄ¼şÃû£¬`module`ÖĞµÄ`loaders`¶ÔÓ¦½âÎö¸÷¸öÄ£¿éÊ±ĞèÒªµÄ¼ÓÔØÆ÷
+
+**Ò»¸ö¼òµ¥µÄÀı×Ó**
+
+`basic/app.js`
+```javascript
+require('./app.css');
+document.getElementById('container').textContent = 'APP';
+```
+
+---------
+`basic/app.css`
+```css
+* {
+    margin: 0;
+    padding: 0;
+}
+#container {
+    margin: 50px auto;
+    width: 50%;
+    height: 200px;
+    line-height: 200px;
+    border-radius: 5px;
+    box-shadow: 0 0 .5em #000;
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+}
+```
+
+--------
+`basic/webpack.config.js`
+```javascript
+/**
+ * webpack´ò°üÅäÖÃÎÄ¼ş
+ */
+
 module.exports = {
-    entry: "./entry.js",
-    output: {
-        path: __dirname,
-        filename: "bundle.js"
+	// Èç¹ûÄãÓĞ¶à¸öÈë¿Újs,ĞèÒª´ò°üÔÚÒ»¸öÎÄ¼şÖĞ,ÄÇÃ´Äã¿ÉÒÔÕâÃ´Ğ´ 
+	// entry : ['./app1.js', './app2.js']
+    entry : './app.js',
+    output : {
+        path : './assets/',
+        filename : '[name].bundle.js'
     },
-    module: {
-        loaders: [
-            { test: /\.css$/, loader: "style!css" }
+    module : {
+        loaders : [
+            { test : /\.js$/, loader : 'babel' },
+            { test : /\.css$/, loader : 'style!css' }
         ]
     }
 };
 ```
 
-## 1. "!"ä»£è¡¨çš„æ„ä¹‰
-ä»£è¡¨äº†åŠ è½½å™¨çš„æµå¼è°ƒç”¨,ä¾‹å¦‚ï¼š
+-----------
+`basic/index.html`
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>basic webpack</title>
+</head>
+<body>
+    <div id="container"></div>
+    <script src="./assets/main.bundle.js"></script>
+</body>
+</html>
+```
 
-`{test : /\.css|less$/, loader : "!style!css!less"}`
+ÔÚ`basic`ÎÄ¼ş¼ĞÖ´ĞĞ`webpack`£¬´ò°üĞÅÏ¢ÈçÏÂ
 
-å°±ä»£è¡¨äº†å…ˆä½¿ç”¨`less`åŠ è½½å™¨æ¥è§£é‡Š`less`æ–‡ä»¶ï¼Œç„¶åä½¿ç”¨`css`åŠ è½½å™¨æ¥è§£æ`less`è§£æåçš„æ–‡ä»¶ï¼Œä¾æ¬¡ç±»æ¨
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723115842221)
 
->```javascript
-require("!style!css!less!bootstrap/less/bootstrap.less");
+Éú³É`main.bundle.js`ÎÄ¼ş£¬`chunk`Ãû³ÆÎª`main`£¬Ò²ÊÇ`webpack`Ä¬ÈÏÉú³ÉµÄ`chunk`Ãû
+
+## 4. webapck³£ÓÃµ½µÄ¸÷µã²ğ·Ö
+---------------
+
+### 4.1 entryÏà¹Ø
+--------------
+ **4.1.1`webpack`µÄ¶àÈë¿ÚÅäÖÃ**
+
+ÉÏÀıµÄ¼òµ¥ÅäÖÃÖĞ£¬Ö»ÓĞÒ»¸öÈë¿ÚÎÄ¼ş£¬ÄÇÃ´Èç¹û¶ÔÓ¦ÓÚÒ»¸öÒ³ÃæĞèÒª¼ÓÔØ¶à¸ö´ò°üÎÄ¼ş»òÕß¶à¸öÒ³ÃæÏëÍ¬Ê±ÒıÈë¶ÔÓ¦µÄ´ò°üÎÄ¼şµÄÊ±ºò£¬Ó¦¸ÃÔõÃ´×ö£¿
+```javascript
+entry : {
+	app1 : './app1.js',
+	app2 : './app2.js'
+}
+```
+ÔÚ`multi-entry`ÎÄ¼ş¼ĞÖ´ĞĞ`webpack`£¬´ò°üĞÅÏ¢ÈçÏÂ
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723122445540)
+
+¿É¼ûÉú³ÉÁËÁ½¸öÈë¿ÚÎÄ¼ş£¬ÒÔ¼°¸÷×Ô¶ÔÓ¦µÄ`chunk`Ãû
+
+----------
+### 4.2 outputÏà¹Ø
+------------
+**4.2.1 `output.publicPath`**
+```javascript
+output: {
+    path: "/home/proj/cdn/assets/[hash]",
+    publicPath: "http://cdn.example.com/assets/[hash]/"
+}
+```
+
+ÒıÓÃÒ»¶Î¹ÙÍøµÄ»°£º
+> The publicPath specifies the public URL address of the output files when referenced in a browser. For loaders that embed `<script>` or `<link>` tags or reference assets like images, publicPath is used as the href or url() to the file when it¡¯s different then their location on disk (as specified by path). 
+
+´óÖÂÒâË¼¾ÍÊÇ£º`publicPath`Ö¸¶¨ÁËÄãÔÚä¯ÀÀÆ÷ÖĞÓÃÊ²Ã´µØÖ·À´ÒıÓÃÄãµÄ¾²Ì¬ÎÄ¼ş£¬Ëü»á°üÀ¨ÄãµÄÍ¼Æ¬¡¢½Å±¾ÒÔ¼°ÑùÊ½¼ÓÔØµÄµØÖ·£¬Ò»°ãÓÃÓÚÏßÉÏ·¢²¼ÒÔ¼°CDN²¿ÊğµÄÊ±ºòÊ¹ÓÃ¡£
+
+±ÈÈçÓĞÏÂÃæÒ»¶ÎÅäÖÃ£º
+```javascript
+var path = require('path');
+var HtmlWebpackPlugin =  require('html-webpack-plugin');
+
+module.exports = {
+    entry : './app.js',
+    output : {
+        path : './assets/',
+        filename : '[name].bundle.js',
+        publicPath : 'http://rynxiao.com/assets/'
+    },
+    module : {
+        loaders : [
+            { test : /\.js$/, loader : 'babel' },
+            { test : /\.css$/, loader : 'style!css' }
+        ]
+    },
+    plugins : [
+        new HtmlWebpackPlugin({
+            filename: './index-release.html',
+            template: path.resolve('index.template'),
+            inject: 'body'
+        })
+    ]
+};
+```
+ÆäÖĞÎÒ½«`publicPath`ÉèÖÃ³ÉÁË`http://rynxiao.com/assets/`£¬ÆäÖĞÉèÖÃµ½ÁË²å¼şµÄÒ»Ğ©¶«Î÷£¬ÕâµãÏÂÃæ»á½²µ½£¬×ÜÖ®Õâ¸ö²å¼şµÄ×÷ÓÃÊÇÉú³ÉÁËÉÏÏß·¢²¼Ê±ºòµÄÊ×Ò³ÎÄ¼ş£¬ÆäÖĞ`script`ÖĞÒıÓÃµÄÂ·¾¶½«»á±»Ìæ»»¡£ÈçÏÂÍ¼£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723132645470)
+
+----------------
+**4.2.2 `output.chunkFilename`**
+
+¸÷¸öÎÄ¼ş³ıÁËÖ÷Ä£¿éÒÔÍâ£¬»¹¿ÉÄÜÉú³ÉĞí¶à¶îÍâ¸½¼ÓµÄ¿é£¬±ÈÈçÔÚÄ£¿éÖĞ²ÉÓÃ´úÂë·Ö¸î¾Í»á³öÏÖÕâÑùµÄÇé¿ö¡£ÆäÖĞ`chunkFilename`ÖĞ°üº¬ÒÔÏÂµÄÎÄ¼şÉú³É¹æÔò£º
+
+[id] »á±»¶ÔÓ¦¿éµÄidÌæ»».
+
+[name] »á±»¶ÔÓ¦¿éµÄnameÌæ»»£¨»òÕß±»idÌæ»»£¬Èç¹ûÕâ¸ö¿éÃ»ÓĞname£©.
+
+[hash] »á±»ÎÄ¼şhashÌæ»».
+
+[chunkhash] »á±»¿éÎÄ¼şhashÌæ»».
+
+ÀıÈç£¬ÎÒÔÚoutputÖĞÈçÏÂÉèÖÃ£º
+```javascript
+output : {
+    path : './assets/',
+    filename : '[name].[hash].bundle.js',
+    chunkFilename: "chunk/[chunkhash].chunk.js"
+}
+```
+Í¬Ê±ÎÒĞŞ¸ÄÁËÒ»ÏÂ`basic/app.js`ÖĞµÄÎÄ¼ş
+```javascript
+require('./app.css');
+
+require.ensure('./main.js', function(require) {
+    require('./chunk.js');
+});
+
+document.getElementById("container").textContent = "APP";
+```
+ÆäÖĞ¶ÔÓ¦µÄ`chunk.js`¾Í»áÉú³É´øÓĞ`chunkhash`µÄ`chunk`ÎÄ¼ş£¬ÈçÏÂÍ¼£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723135002158)
+
+*ÕâÔÚ×ö¸øÎÄ¼ş´ò°æ±¾ºÅµÄÊ±ºòÌØ±ğÓĞÓÃ£¬µ±Ê±ÈçºÎ½øĞĞ`hash`Ìæ»»£¬ÏÂÃæ»á½²µ½*
+
+-----------
+**4.2.3 `output.library`**
+
+Õâ¸öÅäÖÃ×÷Îª¿â·¢²¼µÄÊ±ºò»áÓÃµ½£¬ÅäÖÃµÄÃû×Ö¼´Îª¿âµÄÃû×Ö£¬Í¨³£¿ÉÒÔ´îÅä`libraryTarget`½øĞĞÊ¹ÓÃ¡£ÀıÈçÎÒ¸ø`basic/webpack.config.js`¼ÓÉÏÕâÑùµÄÅäÖÃ£º
+```javascript
+output : {
+	// ...
+	library : 'testLibrary'
+	// ...
+}
+```
+ÄÇÃ´Êµ¼ÊÉÏÉú³É³öÀ´µÄ`main.bundle.js`ÖĞ»áÄ¬ÈÏ´øÉÏÒÔÏÂ´úÂë£º
+```javascript
+var testLibrary = (//....ÒÔÇ°µÄ´ò°üÉú³ÉµÄ´úÂë);
+// ÕâÑùÔÚÖ±½ÓÒıÈëÕâ¸ö¿âµÄÊ±ºò£¬¾Í¿ÉÒÔÖ±½ÓÊ¹ÓÃ`testLibrary`Õâ¸ö±äÁ¿
+```
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723142057926)
+
+------------
+**4.2.4 `output.libraryTarget`**
+
+¹æ¶¨ÁËÒÔÄÄÒ»ÖÖ·½Ê½Êä³öÄãµÄ¿â£¬±ÈÈç£ºamd/cmd/»òÕßÖ±½Ó±äÁ¿£¬¾ßÌå°üÀ¨ÈçÏÂ
+
+`"var"` - ÒÔÖ±½Ó±äÁ¿Êä³ö(Ä¬ÈÏlibrary·½Ê½) `var Library = xxx (default)`
+
+`"this"` - Í¨¹ıÉèÖÃ`this`µÄÊôĞÔÊä³ö `this["Library"] = xxx`
+
+`"commonjs"` - Í¨¹ıÉèÖÃ`exports`µÄÊôĞÔÊä³ö `exports["Library"] = xxx`
+
+`"commonjs2"` - Í¨¹ıÉèÖÃ`module.exports`µÄÊôĞÔÊä³ö `module.exports = xxx`
+
+`"amd"` - ÒÔamd·½Ê½Êä³ö
+
+`"umd"` - ½áºÏcommonjs2/amd/root
+
+ÀıÈçÎÒÒÔ`umd`·½Ê½Êä³ö£¬ÈçÍ¼£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723142325583)
+
+-------------
+
+### 4.3 moduleÏà¹Ø
+--------
+
+#### 4.3.1 `loader`ÖĞ`!`´ú±íµÄº¬Òå
+> `require("!style!css!less!bootstrap/less/bootstrap.less");`
 // => the file "bootstrap.less" in the folder "less" in the "bootstrap"
 //    module (that is installed from github to "node_modules") is
 //    transformed by the "less-loader". The result is transformed by the
 //    "css-loader" and then by the "style-loader".
 //    If configuration has some transforms bound to the file, they will not be applied.
+
+´ú±í¼ÓÔØÆ÷µÄÁ÷Ê½µ÷ÓÃ£¬ÀıÈç£º
+```javascript
+{ test : /\.css|\.less$/, loader : 'style!css!less' }
+```
+¾Í´ú±íÁËÏÈÊ¹ÓÃless¼ÓÔØÆ÷À´½âÊÍlessÎÄ¼ş£¬È»ºóÊ¹ÓÃcss¼ÓÔØÆ÷À´½âÎöless½âÎöºóµÄÎÄ¼ş£¬ÒÀ´ÎÀàÍÆ
+
+--------
+#### 4.3.2 `loaders`ÖĞµÄ`include`Óë`exclude`
+`include`±íÊ¾±ØĞëÒª°üº¬µÄÎÄ¼ş»òÕßÄ¿Â¼£¬¶ø`exclude`µÄ±íÊ¾ĞèÒªÅÅ³ıµÄÄ¿Â¼
+
+±ÈÈçÎÒÃÇÔÚÅäÖÃÖĞÒ»°ãÒªÅÅ³ı`node_modules`Ä¿Â¼£¬¾Í¿ÉÒÔÕâÑùĞ´
+```javascript
+{ 
+	test : /\.js$/, 
+	loader : 'babel',
+	exclude : nodeModuleDir 
+}
+```
+¹Ù·½½¨Òé£ºÓÅÏÈ²ÉÓÃinclude£¬²¢ÇÒinclude×îºÃÊÇÎÄ¼şÄ¿Â¼
+
+---------
+#### 4.3.3 `module.noParse`
+Ê¹ÓÃÁË`noParse`µÄÄ£¿é½«²»»á±»`loaders`½âÎö£¬ËùÒÔµ±ÎÒÃÇÊ¹ÓÃµÄ¿âÈç¹ûÌ«´ó£¬²¢ÇÒÆäÖĞ²»°üº¬`require`¡¢`define`»òÕßÀàËÆµÄ¹Ø¼ü×ÖµÄÊ±ºò(ÒòÎªÕâĞ©Ä£¿é¼ÓÔØ²¢²»»á±»½âÎö£¬ËùÒÔ¾Í»á±¨´í)£¬ÎÒÃÇ¾Í¿ÉÒÔÊ¹ÓÃÕâÏîÅäÖÃÀ´ÌáÉıĞÔÄÜ¡£
+
+ÀıÈçÏÂÃæµÄÀı×Ó£ºÔÚ`basic/`Ä¿Â¼ÖĞĞÂÔö`no-parse.js`
+```javascript
+var cheerio = require('cheerio');
+
+module.exports = function() {
+    console.log(cheerio);
+}
+```
+`webpack.config.js`ÖĞĞÂÔöÈçÏÂÅäÖÃ£º
+```javascript
+module : {
+    loaders : [
+        { test : /\.js$/, loader : 'babel' },
+        { test : /\.css$/, loader : 'style!css' }
+    ],
+    noParse : /no-parse.js/
+}
+```
+µ±Ö´ĞĞ´ò°üºó£¬ÔÚä¯ÀÀÆ÷ÖĞ´ò¿ª`index.html`Ê±£¬¾Í»á±¨´í`require is not defined`
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723152744481)
+
+### 4.4 resolveÏà¹Ø
+
+#### 4.4.1 `resolve.alias`
+ÎªÄ£¿éÉèÖÃ±ğÃû£¬ÄÜ¹»ÈÃ¿ª·¢ÕßÖ¸¶¨Ò»Ğ©Ä£¿éµÄÒıÓÃÂ·¾¶¡£¶ÔÒ»Ğ©¾­³£Òª±»import»òÕßrequireµÄ¿â£¬Èçreact,ÎÒÃÇ×îºÃ¿ÉÒÔÖ±½ÓÖ¸¶¨ËüÃÇµÄÎ»ÖÃ£¬ÕâÑùwebpack¿ÉÒÔÊ¡ÏÂ²»ÉÙËÑË÷Ó²ÅÌµÄÊ±¼ä¡£
+ÀıÈçÎÒÃÇĞŞ¸Ä`basic/app.js`ÖĞµÄÏà¹ØÄÚÈİ£º
+```javascript
+var moment = require("moment");
+
+document.getElementById("container").textContent = moment().locale('zh-cn').format('LLLL');
+```
+¼ÓÔØÒ»¸ö²Ù×÷Ê±¼äµÄÀà¿â£¬ÈÃËüÏÔÊ¾µ±Ç°µÄÊ±¼ä¡£Ê¹ÓÃ`webpack --profile --colors --display-modules`Ö´ĞĞÅäÖÃÎÄ¼ş£¬µÃµ½ÈçÏÂ½á¹û£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723162934423)
+
+ÆäÖĞ»á·¢ÏÖ£¬´ò°ü×Ü¹²Éú³ÉÁË104¸öÒş²ØÎÄ¼ş£¬ÆäÖĞÒ»°ëµÄÊ±¼ä¶¼ÔÚ´¦Àí¹ØÓÚ`moment`Àà¿âÏà¹ØµÄÊÂÇé£¬±ÈÈçÑ°ÕÒ`moment`ÒÀÀµµÄÒ»Ğ©Àà¿âµÈµÈ¡£
+
+ÔÚ`basic/webpack.config.js`¼ÓÈëÈçÏÂÅäÖÃ£¬È»ºóÖ´ĞĞÅäÖÃÎÄ¼ş
+```javascript
+resolve : {
+    alias : {
+        moment : 'moment/min/moment-with-locales.min.js'
+    }
+}
+```
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723163439259)
+
+ÓĞÃ»ÓĞ·¢ÏÖ´ò°üµÄÊ±¼äÒÑ¾­±»´ó´óËõ¶Ì£¬²¢ÇÒÒ²Ö»²úÉúÁËÁ½¸öÒş²ØÎÄ¼ş¡£
+
+**ÅäºÏ`module.noParse`Ê¹ÓÃ**
+
+`module.noParse`²Î¿´ÉÏÃæµÄ½âÊÍ
+```javascript
+noParse: [/moment-with-locales/]
+```
+Ö´ĞĞ´ò°üºó£¬Ğ§¹ûÈçÏÂ£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723163819826)
+
+ÊÇ²»ÊÇ·¢ÏÖ´ò°üµÄÊ±¼ä½øÒ»²½Ëõ¶ÌÁË¡£
+
+**ÅäºÏ`externals`Ê¹ÓÃ**
+
+`externals`²Î¿´ÏÂÃæµÄ½âÊÍ
+>Webpack ÊÇÈç´ËµÄÇ¿´ó£¬ÓÃÆä´ò°üµÄ½Å±¾¿ÉÒÔÔËĞĞÔÚ¶àÖÖ»·¾³ÏÂ£¬Web »·¾³Ö»ÊÇÆäÄ¬ÈÏµÄÒ»ÖÖ£¬Ò²ÊÇ×î³£ÓÃµÄÒ»ÖÖ¡£¿¼ÂÇµ½ Web ÉÏÓĞºÜ¶àµÄ¹«ÓÃ CDN ·şÎñ£¬ÄÇÃ´ ÔõÃ´½« Webpack ºÍ¹«ÓÃµÄ CDN ½áºÏÊ¹ÓÃÄØ£¿·½·¨ÊÇÊ¹ÓÃ externals ÉùÃ÷Ò»¸öÍâ²¿ÒÀÀµ¡£
+```javascript
+externals: {
+    moment: true
+}
+```
+µ±È»ÁË HTML ´úÂëÀïĞèÒª¼ÓÉÏÒ»ĞĞ
+```javascript
+<script src="//apps.bdimg.com/libs/moment/2.8.3/moment-with-locales.min.js"></script>
+```
+Ö´ĞĞ´ò°üºó£¬Ğ§¹ûÈçÏÂ£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723170548257)
+
+---------
+#### 4.4.2 `resolve.extensions`
+
+```javascript
+resolve : {
+    extensions: ["", ".webpack.js", ".web.js", ".js", ".less"]
+}
+```
+ÕâÏîÅäÖÃµÄ×÷ÓÃÊÇ×Ô¶¯¼ÓÉÏÎÄ¼şµÄÀ©Õ¹Ãû£¬±ÈÈçÄãÓĞÈçÏÂ´úÂë£º
+```javascript
+require('style.less');
+
+var app = require('./app.js');
+```
+ÄÇÃ´¼ÓÉÏÕâÏîÅäÖÃÖ®ºó£¬Äã¿ÉÒÔĞ´³É£º
+```javascript
+require('style');
+
+var app = require('./app');
+```
+------------
+### 4.5 externals
+
+µ±ÎÒÃÇÏëÔÚÏîÄ¿ÖĞrequireÒ»Ğ©ÆäËûµÄÀà¿â»òÕßAPI£¬¶øÓÖ²»ÏëÈÃÕâĞ©Àà¿âµÄÔ´Âë±»¹¹½¨µ½ÔËĞĞÊ±ÎÄ¼şÖĞ£¬ÕâÔÚÊµ¼Ê¿ª·¢ÖĞºÜÓĞ±ØÒª¡£´ËÊ±ÎÒÃÇ¾Í¿ÉÒÔÍ¨¹ıÅäÖÃexternals²ÎÊıÀ´½â¾öÕâ¸öÎÊÌâ£º
+```javascript
+//webpack.config.js
+module.exports = {
+    externals: {
+      'react': 'React'
+    },
+    //...
+}
+```
+externals¶ÔÏóµÄkeyÊÇ¸ørequireÊ±ÓÃµÄ£¬±ÈÈçrequire('react')£¬¶ÔÏóµÄvalue±íÊ¾µÄÊÇÈçºÎÔÚglobal£¨¼´window£©ÖĞ·ÃÎÊµ½¸Ã¶ÔÏó£¬ÕâÀïÊÇwindow.React¡£
+
+Í¬ÀíjqueryµÄ»°¾Í¿ÉÒÔÕâÑùĞ´£º'jquery': 'jQuery'£¬ÄÇÃ´require('jquery')¼´¿É¡£
+
+HTMLÖĞ×¢ÒâÒıÈëË³Ğò¼´¿É£º
+```javascript
+<script src="react.min.js" />
+<script src="bundle.js" />
 ```
 
-## 2. è¯·æ±‚å‚æ•°
-è¡¨ç¤ºéœ€è¦ä¼ å…¥loaderçš„å‚æ•°(å¤šåŠè¡¨ç¤ºé™åˆ¶æ¡ä»¶)ï¼Œä¾‹å¦‚ï¼š
+----------------------
+### 4.6 devtool
+Ìá¹©ÁËÒ»Ğ©·½Ê½À´Ê¹µÃ´úÂëµ÷ÊÔ¸ü¼Ó·½±ã£¬ÒòÎª´ò°üÖ®ºóµÄ´úÂëÊÇºÏ²¢ÒÔºóµÄ´úÂë£¬²»ÀûÓÚÅÅ´íºÍ¶¨Î»¡£ÆäÖĞÓĞÈçÏÂ¼¸ÖÖ·½Ê½£¬²Î¼û¹ÙÍø[devtool](http://webpack.github.io/docs/configuration.html#devtool)
 
-`{test : /\.png$/, loader : 'url-loader?mimetype=image/png'}`
-
-## 3. å…³äºcode-splitting
-* é‡‡ç”¨`require.ensure`æ–¹å¼åˆ’åˆ†æ–‡ä»¶å—
-
->`require.ensure(dependencies, callback)`
->The require.ensure method ensures that every dependency in dependencies can be synchronously required when calling the callback. callback is called with the require function as parameter.
->`require.ensure` only loads the modules, it doesnâ€™t evaluate them.
-
-ensure ä½¿å¾—æˆ‘ä»¬å¯åœ¨æ‰€æœ‰çš„dependenciesé¡¹åŠ è½½å®Œæ¯•åï¼Œå†æ‰§è¡Œå›è°ƒ ã€‚ensureä»…ä»…æ˜¯åŠ è½½ç»„ä»¶ï¼Œå¹¶ä¸ä¼šæ‰§è¡Œï¼Œè‹¥è¦æ‰§è¡Œï¼Œéœ€è¦å€ŸåŠ©ä¼ è¿›å»çš„requireå‚æ•°ã€‚
-
-æœ¬åœ°ä¸‰ä¸ªæ¨¡å—a,b,cï¼Œå„åœ¨æ¨¡å—ä¸­æš´éœ²ä¸€ä¸ªå…¨å±€å˜é‡
+ÀıÈç£¬ÎÒÔÚ`basic/app.js`ÖĞÔö¼ÓÈçÏÂÅäÖÃ£º
 ```javascript
-var a = require("./a");
-require.ensure(["./b"], function(require) {
-    var c = require("./c");
+require('./app.css');
+
+// ĞÂÔöhello.js£¬ÏÔÈ»ÔÚÎÄ¼ş¼ĞÖĞÊÇ²»»á´æÔÚhello.jsÎÄ¼şµÄ£¬ÕâÀï»á±¨´í
+require('./hello.js');
+
+document.getElementById("container").textContent = "APP";
+```
+Ö´ĞĞÎÄ¼ş£¬Ö®ºóÔËĞĞ`index.html`£¬±¨´í½á¹ûÈçÏÂ£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723172740677)
+
+¸ø³öµÄÌáÊ¾ÊµÔÚmain.bundle.jsµÚ48ĞĞ£¬µã½øÈ¥¿´ÆäÖĞµÄ±¨´íÈçÏÂ£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723172852054)
+
+´ÓÕâÀïÄãÍêÈ«¿´²»³öµ½µ×Äã³ÌĞòµÄÄÄ¸öµØ·½³ö´íÁË£¬²¢ÇÒÕâÀïµÄĞĞÊı»¹ËãÉÙ£¬µ±Ò»¸öÎÄ¼ş³öÏÖÁËÉÏÇ§ĞĞµÄÊ±ºò£¬Äã¶¨Î»`bug`µÄÊ±¼ä½«»á¸ü³¤¡£
+
+Ôö¼Ó`devtool`ÎÄ¼şÅäÖÃ£¬ÈçÏÂ£º
+```javascript
+module.exports = {
+	devtool: 'eval-source-map',
+	// ....
+};
+```
+Ö´ĞĞÎÄ¼ş£¬Ö®ºóÔËĞĞ`index.html`£¬±¨´í½á¹ûÈçÏÂ£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723173217887)
+
+ÕâÀï·¢ÏÖÖ±½Ó¶¨Î»µ½ÁË`app.js`£¬²¢ÇÒ±¨³öÁËÔÚµÚ¶şĞĞ³ö´í£¬µã»÷È¥¿´ÆäÖĞµÄ±¨´íÈçÏÂ£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723173402869)
+
+·¢ÏÖÎÊÌâ¶¨Î»Ò»Ä¿ÁËÈ»¡£
+
+## 5. webpack³£ÓÃ¼¼ÇÉ
+
+### 5.1 ´úÂë¿é»®·Ö
+------------
+**5.1.1 Commonjs²ÉÓÃ`require.ensure`À´²úÉú`chunk`¿é**
+```javascript
+require.ensure(dependencies, callback);
+
+//static imports
+import _ from 'lodash'
+
+// dynamic imports
+require.ensure([], function(require) {
+  let contacts = require('./contacts')
+})
+```
+ÕâÒ»µãÔÚ`output.chunkFileName`ÖĞÒÑ¾­×ö¹ıÑİÊ¾£¬¿ÉÒÔÈ¥²é¿´
+
+----------------------------
+**5.1.2 AMD²ÉÓÃ`require`À´²úÉú`chunk`¿é**
+```javascript
+require(["module-a", "module-b"], function(a, b) {
+    // ...
 });
 ```
-ç¼–è¯‘ä¹‹åå‘ç°ï¼šç”Ÿæˆäº†ä¸¤ä¸ªå—æ–‡ä»¶ï¼Œensureæ–¹å¼åŠ è½½çš„æ–‡ä»¶æ¨¡å—è¢«å•ç‹¬åˆ’åˆ†ä¸ºä¸€ä¸ªå—
-![ensure](./code-spliting/ensure.png)
 
-æ‰“å¼€chromeæ§åˆ¶å°,è¾“å…¥window.a,ä»¥åŠwindow.cä¼šå¾—åˆ°å€¼,è€Œwindow.bä¼šæ˜¾ç¤ºundefine
+---------------------
+**5.1.3 ½«ÏîÄ¿APP´úÂëÓë¹«¹²¿âÎÄ¼şµ¥¶À´ò°ü**
 
-* é‡‡ç”¨CommonsChunkPluginæ’ä»¶è¿›è¡ŒæŒ‰éœ€åˆ’åˆ†
-
-## 4. Shim
-åœ¨æŸäº›æƒ…å†µä¸‹ï¼Œå¦‚æœä¸€ä¸ªæ–‡ä»¶ä¸­å­˜åœ¨ä¸€äº›ä¸è¢«æ”¯æŒçš„æ¨¡å—æ ¼å¼æˆ–è€…æ ¹æœ¬å°±ä¸èƒ½ç§°ä½œä¸ºæ¨¡å—çš„æ ¼å¼ï¼Œé‚£ä¹ˆwebpackå¹¶ä¸èƒ½å®Œå¥½çš„è§£æå®ƒã€‚è¿™æ—¶å°±è¦å€ŸåŠ©ä¸€äº›æ–¹æ³•
-ä½¿å¾—è¿™æ ·çš„æ–‡ä»¶æˆä¸ºä¸€ä¸ªèƒ½å¤Ÿè¢«webpackè§£æçš„æ¨¡å—
-
-**import-loader**
-
->This loader allows you to put some modules or arbitrary JavaScript onto a local variable of the file.
-
->è¿™ä¸ªåŠ è½½å™¨å…è®¸ä½ å°†ä¸€äº›æ¨¡å—æˆ–è€…ä»»æ„çš„javascriptä»£ç èµ‹å€¼åˆ°ä¸€ä¸ªæœ¬åœ°å˜é‡ä¸Š
-
-æ¯”å¦‚æœ‰å¦‚ä¸‹åœºæ™¯ï¼šæˆ‘ä»¬ç”¨åˆ° Pen è¿™ä¸ªæ¨¡å—, è¿™ä¸ªæ¨¡å—å¯¹ä¾èµ–ä¸€ä¸ª window.jQuery, å¯æˆ‘æ‰‹å¤´çš„ jQuery æ˜¯ CommonJS è¯­æ³•çš„ï¼Œè€Œ Pen å¯¹è±¡åˆæ˜¯ç”Ÿæˆå¥½äº†ç»‘åœ¨å…¨å±€çš„, å¯æ˜¯æˆ‘åˆéœ€è¦é€šè¿‡ require('pen') è·å–å˜é‡ã€‚ æœ€ç»ˆçš„å†™æ³•å°±æ˜¯åš Shim å¤„ç†ç›´æ¥æä¾›æ”¯æŒ:
-
+ÎÒÃÇÔÚ`basic/app.js`ÖĞÌí¼ÓÈçÏÂ´úÂë
 ```javascript
-{test: require.resolve('jquery'), loader: 'expose?jQuery'}, // è¾“å‡ºjQueryåˆ°å…¨å±€
-{test: require.resolve('pen'), loader: 'exports?window.Pen'}    // å°†Penä½œä¸ºä¸€ä¸ªæ¨¡å—å¼•å…¥
+var $ = require('juqery'),
+	_ = require('underscore');
+
+//.....
+```
+È»ºóÎÒÃÇÔÚÅäÖÃÎÄ¼şÖĞÌí¼Ó`vendor`£¬ÒÔ¼°ÔËÓÃ´úÂë·ÖÀëµÄ²å¼ş¶ÔÉú³ÉµÄ`vendor`¿éÖØĞÂÃüÃû
+```javascript
+var webpack = require("webpack");
+
+module.exports = {
+	entry: {
+		app: "./app.js",
+		vendor: ["jquery", "underscore", ...],
+	},
+	output: {
+		filename: "bundle.js"
+	},
+	plugins: [
+		new webpack.optimize.CommonsChunkPlugin(/* chunkName= */"vendor", /* filename= */"vendor.bundle.js")
+	]
+};
+```
+ÔËĞĞÅäÖÃÎÄ¼ş£¬Ğ§¹ûÈçÏÂ£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723191116598)
+
+------------------
+**5.1.4 ³éÈ¡¶àÈë¿ÚÎÄ¼şµÄ¹«¹²²¿·Ö**
+
+ÎÒÃÇÖØĞÂ½¨Á¢Ò»¸öÎÄ¼ş¼Ğ½Ğ×ö`common`£¬ÓĞÈçÏÂÎÄ¼ş£º
+```javascript
+// common/app1.js
+
+console.log("APP1");
+```
+```javascript
+// common/app2.js
+
+console.log("APP2");
+```
+´ò°üÖ®ºóÉú³ÉµÄ`app1.bundle.js`¡¢`app2.bundle.js`ÖĞ»á´æÔÚĞí¶à¹«¹²´úÂë£¬ÎÒÃÇ¿ÉÒÔ½«ËüÌáÈ¡³öÀ´¡£
+```javascript
+// common/webpack.config.js
+
+/**
+ * webpack´ò°üÅäÖÃÎÄ¼ş
+ * ³éÈ¡¹«¹²²¿·Öjs
+ */
+
+var webpack = require('webpack');
+
+module.exports = {
+    entry : {
+        app1 : './app1.js',
+        app2 : './app2.js'
+    },
+    output : {
+        path : './assets/',
+        filename : '[name].bundle.js'
+    },
+    module : {
+        loaders : [
+            { test : /\.js$/, loader : 'babel' },
+            { test : /\.css$/, loader : 'style!css' }
+        ]
+    },
+    plugins : [
+        new webpack.optimize.CommonsChunkPlugin("common.js")
+    ]
+};
+```
+³éÈ¡³öµÄ¹«¹²jsÎª`common.js`,ÈçÍ¼
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723192023883)
+
+²é¿´`app1.bundle.js`£¬·¢ÏÖ´ò°üµÄÄÚÈİ»ù±¾ÊÇÎÒÃÇÔÚÄ£¿éÖĞËùĞ´µÄ´úÂë£¬¹«¹²²¿·ÖÒÑ¾­±»Ìá³öµ½`common.js`ÖĞÈ¥ÁË
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723192454683)
+
+**5.1.5 ³éÈ¡cssÎÄ¼ş£¬´ò°ü³Écss bundle**
+
+Ä¬ÈÏÇé¿öÏÂÒÔ`require('style.css')`Çé¿öÏÂµ¼ÈëÑùÊ½ÎÄ¼ş£¬»áÖ±½ÓÔÚ`index.html`µÄ`<head>`ÖĞÉú³É`<style>`±êÇ©£¬ÊôÓÚÄÚÁª¡£Èç¹ûÎÒÃÇÏë½«ÕâĞ©cssÎÄ¼şÌáÈ¡³öÀ´£¬¿ÉÒÔ°´ÕÕÏÂÃæµÄÅäÖÃÈ¥×ö¡£
+```javascript
+// extract-css/app1.js
+require('./app1.css');
+document.getElementById("container").textContent = "APP";
+
+// extract-css/app2.js
+require('./app2.css');
+document.getElementById("container").textContent = "APP1 APP2";
+
+// extract-css/app1.css
+* {
+    margin: 0;
+    padding: 0;
+}
+#container {
+    margin: 50px auto;
+    width: 50%;
+    height: 200px;
+    line-height: 200px;
+    border-radius: 5px;
+    box-shadow: 0 0 .5em #000;
+    text-align: center;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+// extract-css/app2.css
+#container {
+    background-color: #f0f0f0;
+}
+
+// extract-css/webpack.config.js
+/**
+ * webpack´ò°üÅäÖÃÎÄ¼ş
+ * ³éÈ¡¹«¹²ÑùÊ½(Ã»ÓĞchunk)
+ */
+
+var webpack = require('webpack');
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+
+module.exports = {
+    entry : {
+        app1 : './app1.js',
+        app2 : './app1.js'
+    },
+    output : {
+        path : './assets/',
+        filename : '[name].bundle.js'
+    },
+    module : {
+        loaders : [
+            { test : /\.js$/, loader : 'babel' },
+            { test : /\.css$/, loader : ExtractTextPlugin.extract("style-loader", "css-loader") }
+        ]
+    },
+    plugins : [
+        new ExtractTextPlugin("[name].css")
+    ]
+};
+```
+µÃµ½µÄĞ§¹ûÈçÏÂÍ¼£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723193957752)
+
+Èç¹û°üº¬chunkÎÄ¼ş£¬²¢ÇÒchunkÎÄ¼şÖĞÒ²ÒòÎªÁËÑùÊ½ÎÄ¼ş£¬ÄÇÃ´ÑùÊ½ÎÄ¼ş»áÇ¶Èëµ½jsÖĞ
+
+**cssºÏ²¢µ½Ò»¸öÎÄ¼ş**
+```javascript
+// ...
+module.exports = {
+    // ...
+    plugins: [
+        new ExtractTextPlugin("style.css", {
+            allChunks: true
+        })
+    ]
+}
+```
+Ğ§¹ûÈçÍ¼£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723194749005)
+
+Èç¹û°üº¬chunkÎÄ¼ş£¬²¢ÇÒchunkÎÄ¼şÖĞÒ²ÒòÎªÁËÑùÊ½ÎÄ¼ş£¬ÑùÊ½ÎÄ¼ş²»»áÇ¶Èëµ½jsÖĞ£¬¶øÊÇÖ±½ÓÊä³öµ½`style.css`
+
+**ÅäºÏCommonsChunkPluginÒ»ÆğÊ¹ÓÃ**
+```javascript
+// ...
+module.exports = {
+    // ...
+    plugins: [
+        new webpack.optimize.CommonsChunkPlugin("commons", "commons.js"),
+        new ExtractTextPlugin("[name].css")
+    ]
+}
+```
+Ğ§¹ûÍ¼ÈçÏÂ£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723200356707)
+
+-------------------
+### 5.2 ÈçºÎ¸øÎÄ¼ş´ò°æ±¾
+
+ÏßÉÏ·¢²¼Ê±ÎªÁË·ÀÖ¹ä¯ÀÀÆ÷»º´æ¾²Ì¬×ÊÔ´¶ø¸Ä±äÎÄ¼ş°æ±¾£¬ÕâÀïÌá¹©Á½ÖÖ×ö·¨£º
+
+**5.2.1 Ê¹ÓÃ`HtmlWebpackPlugin`²å¼ş**
+```javascript
+// version/webpack.config.js
+
+/**
+ * webpack´ò°üÅäÖÃÎÄ¼ş
+ * ÎÄ¼ş´ò°æ±¾£¬ÏßÉÏ·¢²¼
+ */
+
+var path = require('path');
+var HtmlWebpackPlugin =  require('html-webpack-plugin');
+
+module.exports = {
+    entry : './app.js',
+    output : {
+        path : './assets/',
+        filename : '[name].[hash].bundle.js',
+        publicPath : 'http://rynxiao.com/assets/'
+    },
+    module : {
+        loaders : [
+            { test : /\.js$/, loader : 'babel' },
+            { test : /\.css$/, loader : 'style!css' }
+        ]
+    },
+    plugins : [
+        new HtmlWebpackPlugin({
+            filename: './index-release.html',
+            template: path.resolve('index.template'),
+            inject: 'body'
+        })
+    ]
+};
+```
+Éú³ÉµÄĞ§¹ûÈçÏÂ£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723201203843)
+
+Ã¿´Î´ò°üÖ®ºó¶¼»áÉú³ÉÎÄ¼şhash£¬ÕâÑù¾Í×öµ½ÁË°æ±¾¿ØÖÆ
+
+----------------
+**5.2.2 ×Ô¶¨Òå²å¼ş¸øÎÄ¼şÌí¼Ó°æ±¾**
+```javascript
+// version/webpack.config.version.js
+
+/**
+ * webpack´ò°üÅäÖÃÎÄ¼ş
+ * ÎÄ¼ş´ò°æ±¾£¬ÏßÉÏ·¢²¼£¬×Ô¶¨Òå²å¼ş·½Ê½
+ */
+
+var path = require('path');
+var fs = require('fs');
+var cheerio = require('cheerio');
+
+module.exports = {
+    entry : './app.js',
+    output : {
+        path : './assets/',
+        filename : '[name].[hash].bundle.js',
+        publicPath : 'http://rynxiao.com/assets/'
+    },
+    module : {
+        loaders : [
+            { test : /\.js$/, loader : 'babel' },
+            { test : /\.css$/, loader : 'style!css' }
+        ]
+    },
+    plugins : [
+        function() {
+            this.plugin("done", function(stats) {
+                fs.writeFileSync(
+                    path.join(__dirname, "stats.json"),
+                    JSON.stringify(stats.toJson())
+                );
+                fs.readFile('./index.html', function(err, data) {
+                    var $ = cheerio.load(data.toString());
+                   $('script[src*=assets]').attr('src','http://rynxiao.com/assets/main.' 
+		                    + stats.hash +'.bundle.js');
+                    fs.writeFile('./index.html', $.html(), function(err) {
+                        !err && console.log('Set has success: '+ stats.hash)
+                    })
+                })
+            });
+        }
+    ]
+};
 ```
 
-**plugin `ProvidePlugin`**
+Ğ§¹ûÈçÍ¼£º
 
->This plugin makes a module available as variable in every module. The module is required only if you use the variable.
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723203654971)
 
->Example: Make $ and jQuery available in every module without writing require("jquery").
+¿ÉÒÔ´ïµ½Í¬ÑùµÄĞ§¹û£¬µ«ÊÇstatsÔİÊ±Ö»ÄÜÄÃµ½hashÖµ£¬ÒòÎªÎÒÃÇÖ»ÄÜ¿¼ÂÇÔÚhashÉÏ×ö°æ±¾¿ØÖÆ£¬±ÈÈçÎÒÃÇ¿ÉÒÔ½¨hashÄ¿Â¼µÈµÈ
 
->```javascript
+----------------
+### 5.3 shim
+±ÈÈçÓĞÈçÏÂ³¡¾°£ºÎÒÃÇÓÃµ½ Pen Õâ¸öÄ£¿é, Õâ¸öÄ£¿é¶ÔÒÀÀµÒ»¸ö window.jQuery, ¿ÉÎÒÊÖÍ·µÄ jQuery ÊÇ CommonJS Óï·¨µÄ£¬¶ø Pen ¶ÔÏóÓÖÊÇÉú³ÉºÃÁË°óÔÚÈ«¾ÖµÄ, ¿ÉÊÇÎÒÓÖĞèÒªÍ¨¹ı require('pen') »ñÈ¡±äÁ¿¡£ ×îÖÕµÄĞ´·¨¾ÍÊÇ×ö Shim ´¦ÀíÖ±½ÓÌá¹©Ö§³Ö:
+
+**×ö·¨Ò»£º**
+```javascript
+{test: require.resolve('jquery'), loader: 'expose?jQuery'}, // Êä³öjQueryµ½È«¾Ö
+{test: require.resolve('pen'), loader: 'exports?window.Pen'}    // ½«Pen×÷ÎªÒ»¸öÄ£¿éÒıÈë
+```
+
+**×ö·¨¶ş£º**
+```javascript
 new webpack.ProvidePlugin({
     $: "jquery",
     jQuery: "jquery",
     "window.jQuery": "jquery"
 })
 ```
+>This plugin makes a module available as variable in every module. 
+>The module is required only if you use the variable.
+>Example: Make $ and jQuery available in every module without writing require("jquery").
 
-å‚è€ƒæ–‡æ¡£ï¼š[å®˜ç½‘ä¸­å…³äºwebpack shimçš„è®²è§£](http://webpack.github.io/docs/shimming-modules.html)
+--------------------
+### 5.4 ÔõÑùĞ´Ò»¸öloader
 
-<https://github.com/webpack/docs/wiki/shimming-modules>
+> Loader ÊÇÖ§³ÖÁ´Ê½Ö´ĞĞµÄ£¬Èç´¦Àí sass ÎÄ¼şµÄ loader£¬¿ÉÒÔÓÉ sass-loader¡¢css-loader¡¢style-loader ×é³É£¬ÓÉ compiler ¶ÔÆäÓÉÓÒÏò×óÖ´ĞĞ£¬µÚÒ»¸ö Loader ½«»áÄÃµ½Ğè´¦ÀíµÄÔ­ÄÚÈİ£¬ÉÏÒ»¸ö Loader ´¦ÀíºóµÄ½á¹û»Ø´«¸øÏÂÒ»¸ö½Ó×Å´¦Àí£¬×îºóµÄ Loader ½«´¦ÀíºóµÄ½á¹ûÒÔ String »ò Buffer µÄĞÎÊ½·µ»Ø¸ø compiler¡£¹ÌÈ»Ò²ÊÇÏ£ÍûÃ¿¸ö loader **Ö»×ö¸Ã×öµÄÊÂ£¬´¿´âµÄÊÂ**£¬¶ø²»Ï£ÍûÒ»Âá¿ğµÄ¹¦ÄÜ¶¼¼¯³Éµ½Ò»¸ö Loader ÖĞ¡£
 
-## 5. å…³äºoutputä¸­çš„publicPath
-ä»£è¡¨äº†çº¿ä¸Šå‘å¸ƒçš„ç›®å½•ï¼Œé€šå¸¸æ˜¯CDNæ›¿æ¢
+¹ÙÍø¸ø³öÁËÁ½ÖÖĞ´·¨£º
+
 ```javascript
-output: {
-    path: "/home/proj/public/assets",
-    publicPath: "/assets/"
-}
+// Identity loader
+module.exports = function(source) {
+  return source;
+};
 ```
 
-## 6. long-term-caching
-å‚ç…§[å®˜ç½‘](http://webpack.github.io/docs/long-term-caching.html),ä¸ºç¼–è¯‘æ–‡ä»¶ç”Ÿæˆhashå€¼,ç„¶ååœ¨è‡ªå®šä¹‰æ’ä»¶ä¸­åŠ¨æ€æ›¿æ¢è„šæœ¬å¼•ç”¨
 ```javascript
-// config
-{
-    output: {
-        path: path.join(__dirname, "assets", "[hash]"),
-        publicPath: "assets/[hash]/",                       // çº¿ä¸Šå‘å¸ƒç›®å½•
-        filename: "output.[hash].bundle.js",                // ç¼–è¯‘ç”Ÿæˆhashæ–‡ä»¶å
-        chunkFilename: "[id].[hash].bundle.js"              // å—æ–‡ä»¶hash
+// Identity loader with SourceMap support
+module.exports = function(source, map) {
+  this.callback(null, source, map);
+};
+```
+µÚÒ»ÖÖÎª»ù´¡µÄĞ´·¨£¬²ÉÓÃ`return`·µ»Ø£¬ ÊÇÒòÎªÊÇÍ¬²½ÀàµÄ Loader ÇÒ·µ»ØµÄÄÚÈİÎ¨Ò»¡£Èç¹ûÄãĞ´loaderÓĞÒÀÀµµÄ»°£¬Í¬ÑùµÄÄãÒ²¿ÉÒÔÔÚÍ·²¿½øĞĞÒıÓÃ£¬±ÈÈç£º
+```javascript
+// Module dependencies.
+var fs = require("fs");
+module.exports = function(source) {
+  return source;
+};
+```
+¶øµÚ¶şÖÖÔòÊÇÏ£Íû¶à¸ö`loader`Ö®¼äÁ´Ê½µ÷ÓÃ£¬½«ÉÏÒ»¸ö`loader`·µ»ØµÄ½á¹û´«µİ¸øÏÂÒ»¸ö`loader`¡£
+
+**°¸Àı**
+
+±ÈÈçÎÒÏë¿ª·¢Ò»¸öes6-loader,×¨ÃÅÓÃÀ´×öÒÔ`.es6`ÎÄ¼şÃû½áÎ²µÄÎÄ¼ş´¦Àí£¬ÄÇÃ´ÎÒÃÇ¿ÉÒÔÕâÃ´Ğ´
+```javascript
+// loader/es6-loader.js
+// µ±È»Èç¹ûÎÒÕâÀï²»Ïë½«Õâ¸öloaderËù·µ»ØµÄ¶«Î÷´«µİ¸øÏÂÒ»¸ölaoder£¬ÄÇÃ´ÎÒ
+// ¿ÉÒÔÔÚ×îºóÖ±½Ó·µ»Øreturn source
+// ÕâÀï¸Ä±äÖ®ºó£¬ÎÒÖ±½Ó¿ÉÒÔÈÓ¸øbabel-loader½øĞĞ´¦Àí
+module.exports = function(source, map) {
+	// ½ÓÊÕes6½áÎ²ÎÄ¼ş£¬½øĞĞsource¸Ä±ä
+    source = "console.log('I changed in loader');"
+    // ´òÓ¡´«µİ½øÀ´µÄ²ÎÊı
+    console.log("param", this.query);
+    // ... ÎÒÃÇ»¹¿ÉÒÔ×öÒ»Ğ©ÆäËûµÄÂß¼­´¦Àí
+    this.callback(null, source, map);
+};
+
+// loader/loader1.es6
+let a = 1;
+console.log(a);
+
+// loader/app.js
+// ÏòloaderÖĞ´«µİ²ÎÊı
+require('./es6-loader?param1=p1!./loader1.es6');
+document.getElementById("container").textContent = "APP";
+```
+Ö´ĞĞwebpack´ò°üÃüÁî£¬ÔÚ¿ØÖÆÌ¨»á´òÓ¡³öparamµÄÖµ£¬ÈçÍ¼£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723221900665)
+
+ÔÚÖ´ĞĞÍê³ÉÖ®ºó£¬´ò¿ª`index.html`£¬ÔÚ¿ØÖÆÌ¨´òÓ¡³ö¡°I changed in loader¡±£¬¶ø²»ÊÇ1
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723222056334)
+
+**½ø½×**
+
+¿ÉÒÔÈ¥ÔÄ¶ÁÒÔÏÂÕâÆªÎÄÕÂ [ÈçºÎ¿ª·¢Ò»¸ö Webpack loader](http://web.jobbole.com/84851/)
+
+--------------------
+### 5.4 ÔõÑùĞ´Ò»¸öplugin
+
+²å¼ş»ù±¾µÄ½á¹¹
+
+²å¼şÊÇ¿ÉÒÔÊµÀı»¯µÄ¶ÔÏó£¬ÔÚËüµÄprototypeÉÏ±ØĞë°ó¶¨Ò»¸ö`apply`·½·¨¡£Õâ¸ö·½·¨»áÔÚ²å¼ş°²×°µÄÊ±ºò±»`Webpack compiler`½øĞĞµ÷ÓÃ¡£
+
+```javascript
+function HelloWorldPlugin(options) {
+	// Setup the plugin instance with options...
+}
+
+HelloWorldPlugin.prototype.apply = function(compiler) {
+	compiler.plugin('done', function() {
+	    console.log('Hello World!'); 
+	});
+};
+
+module.exports = HelloWorldPlugin;
+```
+
+°²×°Ò»¸ö²å¼ş£¬½«ÆäÌí¼Óµ½ÅäÖÃÖĞµÄ`plugins`Êı×éÖĞ¡£
+
+```javascript
+var HelloWorldPlugin = require('hello-world');
+
+var webpackConfig = {
+// ... config settings here ...
+	plugins: [
+		new HelloWorldPlugin({options: true})
+	]
+};
+```
+Ö´ĞĞĞ§¹ûÈçÍ¼£º
+
+![ÕâÀïĞ´Í¼Æ¬ÃèÊö](http://img.blog.csdn.net/20160723223746845)
+
+ÕâÀïÖ»×÷¼òµ¥µÄÒıÈë£¬Æ½³£Ò»°ã¶¼²»ĞèÒª×Ô¼ºĞ´²å¼ş£¬Èç¹ûÏë½øÒ»²½ÁË½â£¬¿ÉÒÔÈ¥¿´¹ÙÍøÀı×Ó
+
+### 5.5 ²¼ÖÃÒ»¸ö±¾µØ·şÎñÆ÷
+```javascript
+// 1.È«¾Ö°²×°webpack-dev-server
+cnpm install -g webpack-dev-server
+
+// 2. ÉèÖÃÒ»¸öÎÄ¼şÆô¶¯Ä¿Â¼£¬ÔËĞĞ
+webpack-dev-server --content-base basic/
+
+// 3. ÔÚä¯ÀÀÆ÷ÊäÈëlocalhost:8080
+```
+
+------------------
+### 5.6 ÈÈÌæ»»
+```javascript
+// auto-refresh/app.js
+document.getElementById("container").textContent = "APP APP HOT ";
+console.log("OK");
+
+// auto-refresh/server.js
+var webpack = require('webpack');
+var config = require('./webpack.config.js');
+var WebpackDevServer = require("webpack-dev-server");
+
+var compiler = webpack(config);
+new WebpackDevServer(webpack(config), {
+    publicPath: config.output.publicPath,
+    hot: true,
+    noInfo: false,
+    historyApiFallback: true
+}).listen(8080, 'localhost', function (err, result) {
+    if (err) {
+        console.log(err);
     }
-}
+    console.log('Listening at localhost:3000');
+});
 
-// generate json File && replace html reference
-plugins: [
-  function() {
-    this.plugin("done", function(stats) {
-        fs.writeFileSync(
-            path.join(__dirname, "stats.json"),
-            JSON.stringify(stats.toJson())
-        );
-        fs.readFile('./index.html', function(err, data) {
-            var $ = cheerio.load(data.toString());
-            $('script[src*=assert]').attr('src', './assert/'+ stats.hash +'/output.'+ stats.hash +'.bundle.js');
-            fs.writeFile('./index.html', $.html(), function(err) {
-                !err && console.log('Set has success: '+ stats.hash)
-            })
-        })
-    });
-  }
-]
+// auto-refresh/webpack.config.js
+/**
+ * webpack´ò°üÅäÖÃÎÄ¼ş
+ */
 
-```
+var webpack = require('webpack');
 
-## 7. stylesheets(å…³äºç‹¬ç«‹å‡ºcssæ–‡ä»¶çš„ç”¨æ³•)
-å®˜ç½‘å·²ç»è®²è§£å¾—å¾ˆæ¸…æ¥š <http://webpack.github.io/docs/stylesheets.html>
-
-* with plugin 'extract-text-webpack-plugin'
-
-`npm install extract-text-webpack-plugin --save-dev`
-
-```javascript
-// loaders
-module: {
-    loaders: [
-        {test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader")}
+module.exports = {
+    entry : [
+        'webpack-dev-server/client?http://127.0.0.1:8080', // WebpackDevServer host and port
+        'webpack/hot/only-dev-server',
+        './app.js'
+    ],
+    output : {
+        path : './assets/',
+        filename : '[name].bundle.js',
+        publicPath : './assets/'
+    },
+    module : {
+        loaders : [
+            { test : /\.js$/, loader : 'react-hot!babel' },
+            { test : /\.css$/, loader : 'style!css' }
+        ]
+    },
+    plugins : [
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin(),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': '"development"'
+        }),
     ]
-},
+};
 
-// plugins
-plugins: [
-    new ExtractTextPlugin("[name].css")
-]
+// auto-refresh/index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>basic webpack</title>
+</head>
+<body>
+    <div id="container"></div>
+    <script src="./assets/main.bundle.js"></script>
+</body>
+</html>
 
-// all style will be commited to the [name].css (the name is what your entry has been setted)
+// ÔËĞĞ
+node server.js
 
-// all styles in separate css output file with the config
-// new ExtractTextPlugin("style.css", {allChunks: true})
-// so the chunk files don't contain the embedded styles
+// ä¯ÀÀÆ÷ÊäÈë£ºlocalhost:8080
 ```
 
-* styles in commons chunk
+----------------------------
+### 5.7 ÈÃwepack.config.jsÖ§³Öes6Ğ´·¨
+```javascript
+// 1. °²×°babel-core¡¢babel-preset-es2015ÒÔ¼°babel-loader
 
->You can use a separate css file in combination with the CommonsChunkPlugin. In this case a css file for the commons chunk is emitted too.
+// 2. ÏîÄ¿¸ùÄ¿Â¼ÏÂÅäÖÃ.babelrcÎÄ¼ş
+{
+  "presets": ["es2015"]
+}
+
+// 3. ½«webpack.config.jsÖØĞÂÃüÃûÎªwebpack.config.babel.js
+
+// 4.ÔËĞĞwebpack --config webpack.config.babel.js
+
+// ËµÃ÷node °æ±¾5.0ÒÔÉÏ£¬babel-core°æ±¾6ÒÔÉÏĞèÒªÈç´ËÅäÖÃ
+```
+>ÕâÊÇÒ»¸ö Webpack Ö§³Ö£¬µ«ÎÄµµÀïÍêÈ«Ã»ÓĞÌáµ½µÄÌØĞÔ  £¨Ó¦¸ÃÂíÉÏ¾Í»á¼ÓÉÏ£©¡£Ö»ÒªÄã°ÑÅäÖÃÎÄ¼şÃüÃû³É webpack.config.[loader].js £¬Webpack ¾Í»áÓÃÏàÓ¦µÄ loader È¥×ª»»Ò»±éÅäÖÃÎÄ¼ş¡£ËùÒÔÒªÊ¹ÓÃÕâ¸ö·½·¨£¬ÄãĞèÒª°²×° babel-loader ºÍ babel-core Á½¸ö°ü¡£¼Ç×¡Äã²»ĞèÒªÍêÕûµÄ babel °ü¡£
+
+**ÆäËû°ì·¨(Î´³É¹¦)**
 
 ```javascript
-plugins: [
-    new webpack.optimize.CommonsChunkPlugin(/*name:*/"commons", /*chunks:*/"commons.js"),
-    new ExtractTextPlugin("[name].css")
-]
+1.ÔÚÉÏÊöµÄ·½°¸ÖĞ£¬ÆäÊµ²»ĞèÒªÖØĞÂÃüÃû¾Í¿ÉÒÔÖ±½ÓÔËĞĞwebpack£¬µ«ÊÇ½ñÌìÊÔÁËÒ»Ö±²»³É¹¦
+2.{ 
+	test : /\.js|jsx$/, 
+	loader : 'babel',
+	query: {
+          //Ìí¼ÓÁ½¸öpresents Ê¹ÓÃÕâÁ½ÖÖpresets´¦Àíjs»òÕßjsxÎÄ¼ş
+          presets: ['es2015', 'react']
+    } 
+}
 ```
 
-### Tips
-* é…åˆCommonsChunkPluginæ’ä»¶ä½¿ç”¨,ä¼šæå‡ºå…¬å…±çš„jsæ–‡ä»¶ä»¥åŠå…¬å…±çš„cssæ–‡ä»¶
-* å¦‚æœç¼–è¯‘å‡ºé”™,ä¸å¦¨å‡çº§ä¸€ä¸‹å…¨å±€webpackè¯•è¯•,æˆ‘å½“æ—¶çš„1.12.2çš„ç‰ˆæœ¬ä¸€ç›´æŠ¥é”™ï¼Œå‡çº§ä¹‹åå°±å¯ä»¥äº†
 
-## 8. resolve
-* extensions(å¯ä»¥åœ¨æ–‡ä»¶ä¸­ç›´æ¥å¼•ç”¨éœ€è¦åŠ è½½çš„æ–‡ä»¶ without suffix)
+## 6.Ïà¹ØÁ´½Ó
+[webpack¹Ù·½ÍøÕ¾](http://webpack.github.io/docs/)
 
-```javascript
-resolve: {
-    extensions: ['', '.js', '.es6']
-},
-```
-* alias
+[ÓÃ ES6 ±àĞ´ Webpack µÄÅäÖÃÎÄ¼ş](http://cnodejs.org/topic/56346ee43ef9ce60493b0c96)
 
-resolveé‡Œé¢æœ‰ä¸€ä¸ªaliasçš„é…ç½®é¡¹ç›®ï¼Œèƒ½å¤Ÿè®©å¼€å‘è€…æŒ‡å®šä¸€äº›æ¨¡å—çš„å¼•ç”¨è·¯å¾„ã€‚å¯¹ä¸€äº›ç»å¸¸è¦è¢«importæˆ–è€…requireçš„åº“ï¼Œå¦‚react,æˆ‘ä»¬æœ€å¥½å¯ä»¥ç›´æ¥æŒ‡å®šå®ƒä»¬çš„ä½ç½®ï¼Œè¿™æ ·webpackå¯ä»¥çœä¸‹ä¸å°‘æœç´¢ç¡¬ç›˜çš„æ—¶é—´ã€‚
+[Ò»Ğ¡Ê±°ü½Ì»á ¡ª¡ª webpack ÈëÃÅÖ¸ÄÏ](http://www.cnblogs.com/vajoy/p/4650467.html)
 
-![alias](./library&&externals/alias.png)
+[WebpackÉµ¹ÏÊ½Ö¸ÄÏ£¨Ò»£©](https://zhuanlan.zhihu.com/p/20367175)
 
-## 9. ä¸€äº›æ’ä»¶
-- å‹ç¼©
+[Ç°¶ËÄ£¿é»¯¹¤¾ß-webpack](http://www.cnblogs.com/Leo_wl/p/4862714.html)
 
->To minimize your scripts (and your css, if you use the css-loader) webpack supports a simple option:
+[ÈçºÎ¿ª·¢Ò»¸ö Webpack Loader ( Ò» )](http://web.jobbole.com/84851/)
 
->`new webpack.optimize.UglifyJsPlugin()`
+[¹ØÓÚexternals½âÊÍ](https://segmentfault.com/q/1010000002720840)
 
-- åˆå¹¶æ¯”è¾ƒå°çš„å—æ–‡ä»¶ï¼Œå‡å°‘requestè¯·æ±‚
+[webpackÊ¹ÓÃÓÅ»¯](http://www.open-open.com/lib/view/open1452487103323.html)
 
->While writing your code, you may have already added many code split points to load stuff on demand. After compiling you might notice that there are too many chunks that are too small - creating larger HTTP overhead. Luckily, Webpack can post-process your chunks by merging them. You can provide two options:
+[http://webpack.github.io/docs/installation.html](http://webpack.github.io/docs/installation.html)
 
->Limit the maximum chunk count with `new webpack.optimize.LimitChunkCountPlugin({maxChunks: 15})`
+[https://github.com/petehunt/webpack-howto](https://github.com/petehunt/webpack-howto)
 
->//é™åˆ¶æœ€å¤§çš„æ–‡ä»¶å—æ•°é‡
 
->Limit the minimum chunk size with `new webpack.optimize.MinChunkSizePlugin({minChunkSize: 10000})`
 
-> //é™åˆ¶æ¯ä¸€ä¸ªæ–‡ä»¶å—çš„æœ€å°å ç”¨ç©ºé—´
 
-## 10. library && externals
-`output.libraryTarget` æŒ‡å®šè¾“å‡ºçš„ç±»å‹,æŒ‡å®šå¯ä»¥åœ¨æ–‡ä»¶ä¸­ä»¥ä½•ç§æ–¹å¼ä½¿ç”¨(CommonJs, AMD, var Or UMD)
 
-`output.library` æŒ‡å®šè¾“å‡ºåº“çš„åå­—
 
-`externals` å¦‚æœä¸€äº›åº“ä¸æƒ³è¢«æ‰“åŒ…åˆ°bundleä¸­ï¼Œè€Œåˆå¿…é¡»è¢«ä¾èµ–ï¼Œé‚£ä¹ˆå°±å¯ä»¥ä½¿ç”¨è¿™ä¸ªå‚æ•°ï¼ŒåŒæ—¶åœ¨é¡µé¢ä¸­ä½¿ç”¨`<script>`æ ‡ç­¾
 
-externalså¯¹è±¡çš„keyæ˜¯ç»™requireæ—¶ç”¨çš„ï¼Œæ¯”å¦‚require('react')ï¼Œå¯¹è±¡çš„valueè¡¨ç¤ºçš„æ˜¯å¦‚ä½•åœ¨globalï¼ˆå³windowï¼‰ä¸­è®¿é—®åˆ°è¯¥å¯¹è±¡ã€‚
-
-åŒç†jqueryçš„è¯å°±å¯ä»¥è¿™æ ·å†™ï¼š'jquery': 'jQuery'ï¼Œé‚£ä¹ˆrequire('jquery')å³å¯ã€‚
-
-## 11.ä¸Šçº¿çš„ä¸€äº›é…ç½®æ–‡ä»¶(å¯å¦å¤–å†™ä¸€ä¸ªé…ç½®æ–‡ä»¶ï¼Œä¾‹å¦‚:webpack.pro.config.js è°ƒç”¨ï¼šwebpack --config webpack.pro.config.js)
-- å‹ç¼©Javascript
-
-`new webpack.optimize.UglifyJsPlugin()`
-
-`new webpack.optimize.MinChunkSizePlugin(minSize)`
-
-- å‹ç¼©React
-
-```javascript
-new webpack.DefinePlugin({
-    "process.env": {
-        NODE_ENV: JSON.stringify("production")
-    }
-})
-```
-- CDNæ›¿æ¢
-
-è®¾ç½®output.PublicPathå³å¯
-
-- æŠ½å–å…¬å…±CSSã€JSæ–‡ä»¶
-
-å‚çœ‹ç¬¬7ç‚¹

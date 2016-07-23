@@ -17,6 +17,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+/node_modules
+.git
+.idea
 # =========================
 # Operating System Files
 # =========================
@@ -46,3 +49,4 @@ Network Trash Folder
 Temporary Items
 .apdisk
 node_modules
+.idea
